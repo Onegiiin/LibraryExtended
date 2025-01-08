@@ -16,15 +16,19 @@ public class Book {
     @Size(min = 5, max = 200, message = "Author must be between 5 and 200 characters")
     private String author;
 
-    @NotEmpty(message = "Year can't be empty")
     @Range(min = 0, max = 2025, message = "Year must be in range from 0 to Current year")
     private int year;
+
+  //  private Person reader;
 
     public Book(int year, String title, int id, String author) {
         this.year = year;
         this.title = title;
         this.id = id;
         this.author = author;
+    }
+
+    public Book() {
     }
 
     public String getTitle() {
@@ -58,4 +62,12 @@ public class Book {
     public void setYear(int year) {
         this.year = year;
     }
+
+/*    public Person getReader() {
+        return reader;
+    }
+
+    public void setReader(Person reader) {
+        this.reader = reader;
+    }*/
 }
