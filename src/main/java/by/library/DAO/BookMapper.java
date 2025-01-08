@@ -1,30 +1,28 @@
 package by.library.DAO;
 
 import by.library.model.Book;
-import org.springframework.beans.factory.annotation.Autowired;
+import by.library.model.Person;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
-//@Component
 public class BookMapper implements RowMapper<Book> {
-/*    private final PersonDAO personDAO;
-
-    @Autowired
-    public BookMapper(PersonDAO personDAO) {
-        this.personDAO = personDAO;
-    }*/
-
     @Override
     public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
         Book book = new Book();
+
         book.setId(rs.getInt("b_id"));
         book.setTitle(rs.getString("b_title"));
         book.setAuthor(rs.getString("b_author"));
         book.setYear(rs.getInt("b_year"));
-       // book.setReader(personDAO.get(rs.getInt("b_reader")));
+
+
+            rs.getInt("b_reader");
+            Optional<Person> reader = rs.wasNull() || rs.getMetaData().getColumnCount() < 6
+                    ? Optional.empty()
+                    : Optional.of(new PersonMapper().mapRow(rs, rowNum));
+            book.setReader(reader);
         return book;
     }
 }

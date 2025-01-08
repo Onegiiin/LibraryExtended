@@ -1,6 +1,7 @@
 package by.library.controllers;
 
 import by.library.DAO.BookDAO;
+import by.library.DAO.PersonDAO;
 import by.library.model.Book;
 import by.library.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,12 @@ import javax.validation.Valid;
 @RequestMapping("/books")
 public class BooksController {
     private final BookDAO bookDAO;
+    private final PersonDAO personDAO;
 
     @Autowired
-    public BooksController(BookDAO bookDAO) {
+    public BooksController(BookDAO bookDAO, PersonDAO personDAO) {
         this.bookDAO = bookDAO;
+        this.personDAO = personDAO;
     }
     
     @GetMapping()
@@ -29,7 +32,12 @@ public class BooksController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable Integer id, Model model){
+        Book book = bookDAO.get(id);
         model.addAttribute("book", bookDAO.get(id));
+        if (!book.getReader().isPresent()){
+            model.addAttribute("people", personDAO.index());
+            model.addAttribute("person", new Person());
+        }
         return "books/show";
     }
 
@@ -54,12 +62,24 @@ public class BooksController {
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("book") @Valid Book book, BindingResult bindingResult){
+    public String update(@ModelAttribute("book") @Valid Book book, @PathVariable("id")Integer id, BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
             return "books/edit";
         }
-        bookDAO.update(book);
-        return "redirect:/books/" + book.getId();
+        bookDAO.update(id, book);
+        return "redirect:/books/" + id;
+    }
+
+    @PatchMapping("/{id}/release")
+    public String release(@PathVariable("id") Integer id){
+        bookDAO.release(id);
+        return "redirect:/books/" + id;
+    }
+
+    @PatchMapping("/{id}/assign")
+    public String assign(@PathVariable("id") Integer id, @ModelAttribute("person") Person person){
+        bookDAO.assign(id, person);
+        return "redirect:/books/" + id;
     }
 
     @DeleteMapping("/{id}")

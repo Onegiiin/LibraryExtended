@@ -1,5 +1,6 @@
 package by.library.DAO;
 
+import by.library.model.Book;
 import by.library.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -34,14 +35,19 @@ public class PersonDAO {
                 .stream().findFirst();
     }
 
+    public List<Book> getBooks(Integer id){
+        return jdbcTemplate.query("SELECT * FROM Book WHERE b_reader=?",
+                        new BookMapper(), id);
+    }
+
     public void save(Person person){
         jdbcTemplate.update("INSERT INTO Person(\"p_name\", \"p_middleName\", \"p_surname\", \"p_yearOfBirth\") VALUES(?,?,?,?)",
                 person.getName(), person.getMiddleName(), person.getSurname(), person.getYearOfBirth());
     }
 
-    public void update(Person person){
+    public void update(Integer id, Person person){
         jdbcTemplate.update("UPDATE Person SET \"p_name\"=?, \"p_middleName\"=?, \"p_surname\"=?, \"p_yearOfBirth\"=? WHERE p_id=?",
-                person.getName(), person.getMiddleName(), person.getSurname(), person.getYearOfBirth(), person.getId());
+                person.getName(), person.getMiddleName(), person.getSurname(), person.getYearOfBirth(), id);
     }
 
     public void delete(Integer id){

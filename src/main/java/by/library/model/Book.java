@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.Optional;
 
 public class Book {
     private int id;
@@ -19,7 +20,7 @@ public class Book {
     @Range(min = 0, max = 2025, message = "Year must be in range from 0 to Current year")
     private int year;
 
-  //  private Person reader;
+    private Optional<Person> reader;
 
     public Book(int year, String title, int id, String author) {
         this.year = year;
@@ -63,11 +64,11 @@ public class Book {
         this.year = year;
     }
 
-/*    public Person getReader() {
+    public Optional<Person> getReader() {
         return reader;
     }
 
-    public void setReader(Person reader) {
+    public void setReader(Optional<Person> reader) {
         this.reader = reader;
-    }*/
+    }
 }

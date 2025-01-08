@@ -6,10 +6,16 @@
 </head>
 <body>
 <p th:text="${person.getSurname() + ' ' + person.getName() + ' ' + person.getMiddleName() + ', ' + person.getYearOfBirth()}">VALUE</p>
-
-
-<a th:href="@{/people/{id}/edit(id=${person.getId()})}">Edit</a>
-
+<h5 th:text="${books.isEmpty() ? 'This person hasn''t taken any books' : 'Taken books'}"></h5>
+<div th:if="${!books.isEmpty()}" th:each="book : ${books}">
+    <a th:href="@{/books/{id}(id=${book.getId()})}"
+       th:text="${book.getTitle() + ', ' + book.getAuthor() + ' ' + book.getYear()}">user</a>
+</div>
+<br>
+<hr>
+<form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
+    <button type="submit">Edit</button>
+</form>
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
     <input type="submit" value="Delete"/>
 </form>
