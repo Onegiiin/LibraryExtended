@@ -1,26 +1,36 @@
-package by.library.model;
+package by.library.models;
 
+import jakarta.persistence.*;
 import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-import java.util.Optional;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
+@Entity
+@Table(name = "Book")
 public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @NotEmpty(message = "Title can't be empty")
     @Size(min = 2, max = 100, message = "Title must be between 2 and 100 characters")
+    @Column(name = "title")
     private String title;
 
     @NotEmpty(message = "Author can't be empty")
     @Size(min = 5, max = 200, message = "Author must be between 5 and 200 characters")
+    @Column(name = "author")
     private String author;
 
     @Range(min = 0, max = 2025, message = "Year must be in range from 0 to Current year")
+    @Column(name = "year")
     private int year;
 
-    private Optional<Person> reader;
+    @ManyToOne()
+    @JoinColumn(name = "reader", referencedColumnName = "id")
+    private Person reader;
 
     public Book(int year, String title, int id, String author) {
         this.year = year;
@@ -64,11 +74,11 @@ public class Book {
         this.year = year;
     }
 
-    public Optional<Person> getReader() {
+    public Person getReader() {
         return reader;
     }
 
-    public void setReader(Optional<Person> reader) {
+    public void setReader(Person reader) {
         this.reader = reader;
     }
 }
