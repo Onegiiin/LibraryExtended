@@ -6,6 +6,8 @@ import org.hibernate.validator.constraints.Range;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "Book")
 public class Book {
@@ -31,6 +33,12 @@ public class Book {
     @ManyToOne()
     @JoinColumn(name = "reader", referencedColumnName = "id")
     private Person reader;
+
+    @JoinColumn(name = "takingTime")
+    private Date takingTime;
+
+    @Transient
+    private boolean isExpired = false;
 
     public Book(int year, String title, int id, String author) {
         this.year = year;
@@ -80,5 +88,21 @@ public class Book {
 
     public void setReader(Person reader) {
         this.reader = reader;
+    }
+
+    public Date getTakingTime() {
+        return takingTime;
+    }
+
+    public void setTakingTime(Date takingTime) {
+        this.takingTime = takingTime;
+    }
+
+    public boolean isExpired() {
+        return isExpired;
+    }
+
+    public void setExpired(boolean expired) {
+        isExpired = expired;
     }
 }

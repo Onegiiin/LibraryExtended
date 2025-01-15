@@ -6,9 +6,10 @@
 </head>
 <body>
 <p th:text="${person.getSurname() + ' ' + person.getName() + ' ' + person.getMiddleName() + ', ' + person.getYearOfBirth()}">VALUE</p>
-<h5 th:text="${books.isEmpty() ? 'This person hasn''t taken any books' : 'Taken books'}"></h5>
-<div th:if="${!books.isEmpty()}" th:each="book : ${books}">
+<h5 th:text="${person.getBookList().isEmpty() ? 'This person hasn''t taken any books' : 'Taken books'}"></h5>
+<div th:if="${!person.getBookList().isEmpty()}" th:each="book : ${person.getBookList()}">
     <a th:href="@{/books/{id}(id=${book.getId()})}"
+       th:style="${book.isExpired() ? 'color: red;' : ''}"
        th:text="${book.getTitle() + ', ' + book.getAuthor() + ' ' + book.getYear()}">user</a>
 </div>
 <br>

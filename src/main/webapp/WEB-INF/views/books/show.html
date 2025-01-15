@@ -6,17 +6,17 @@
 </head>
 <body>
 <p th:text="${book.getTitle() + ', ' + book.getAuthor() + ' ' + book.getYear()}">VALUE</p>
-<div th:if="${book.getReader().isPresent()}">
+<div th:if="${book.getReader() != null}">
     <p>The book is currently being read by
-        <a th:href="@{/people/{id}(id=${book.getReader().get().id})}">
-            <span th:text="${book.getReader().get().name} + ' ' + ${book.getReader().get().middleName} + ' ' + ${book.getReader().get().surname}"></span>
+        <a th:href="@{/people/{id}(id=${book.getReader().id})}">
+            <span th:text="${book.getReader().name} + ' ' + ${book.getReader().middleName} + ' ' + ${book.getReader().surname}"></span>
         </a>
     </p>
     <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}">
         <input type="submit" value="Release the book"/>
     </form>
 </div>
-<div th:if="${book.getReader().isEmpty()}">
+<div th:if="${book.getReader() == null}">
     <p>The book is currently available for reading.</p>
     <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
         <label for="person">Assign to reader:</label>
